@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Complete
 {
@@ -14,6 +15,7 @@ namespace Complete
         public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
+        public GameObject pauseMenu;
 
         
         private int m_RoundNumber;                  // Which round the game is currently on.
@@ -21,7 +23,7 @@ namespace Complete
         private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
         private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
-
+        private bool paused;
 
         private void Start()
         {
@@ -34,6 +36,14 @@ namespace Complete
 
             // Once the tanks have been created and the camera is using them as targets, start the game.
             StartCoroutine (GameLoop ());
+        }
+
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.P))
+            {
+                ChangePaused();
+            }
         }
 
 
@@ -262,5 +272,22 @@ namespace Complete
                 m_Tanks[i].DisableControl();
             }
         }
+
+        void ChangePaused()
+        {
+            if (!paused)
+            {
+                paused = true;
+                pauseMenu.SetActive(true);
+                Time.timeScale = 0;
+            }
+            else
+            {
+                paused = false;
+                pauseMenu.SetActive(false);
+                Time.timeScale = 1;
+            }
+        }
     }
+ 
 }
